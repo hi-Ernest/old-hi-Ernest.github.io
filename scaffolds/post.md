@@ -1,5 +1,5 @@
 ---
-date: 2021-12-19
-title: 2021/04/19有感
-tags: 生活
+title: {{ title }}
+date: {{ date }}
+tag: 
 ---
