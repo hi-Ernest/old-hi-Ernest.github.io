@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="什么是GC GC指一种自动的存储器管理机制，当某个程序占用的一部分内存空间不再被这个程序访问时，这个程序会借助垃圾回收算法向操作系统归还这部分内存空间。垃圾回收器可以减轻程序员的负担，也减少程序中的错误。   -from wiki  垃圾回收算法有哪些 分别的优缺点引用计数法对每个对象设置引用计数，当对象被引用+1，失去引用&#x2F;销毁-1，当计数为0的时回收对象内存 优点：简单直接，回收速度快 缺点：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="垃圾回收GC">
+<meta property="og:url" content="https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/index.html">
+<meta property="og:site_name" content="Ernest&#39;s blog">
+<meta property="og:description" content="什么是GC GC指一种自动的存储器管理机制，当某个程序占用的一部分内存空间不再被这个程序访问时，这个程序会借助垃圾回收算法向操作系统归还这部分内存空间。垃圾回收器可以减轻程序员的负担，也减少程序中的错误。   -from wiki  垃圾回收算法有哪些 分别的优缺点引用计数法对每个对象设置引用计数，当对象被引用+1，失去引用&#x2F;销毁-1，当计数为0的时回收对象内存 优点：简单直接，回收速度快 缺点：">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-12T17:21:40.000Z">
+<meta property="article:modified_time" content="2021-12-12T17:25:46.253Z">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>垃圾回收GC</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/projects_url">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/12/16/%E6%9C%80%E8%BF%91%E9%A3%8E%E6%B3%A2%E6%84%9F%E5%8F%97/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/12/13/%E4%B8%80%E5%8F%AA%E8%88%B9%E7%9A%84%E5%AD%A4%E7%8B%AC/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&text=垃圾回收GC"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&is_video=false&description=垃圾回收GC"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=垃圾回收GC&body=Check out this article: https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&name=垃圾回收GC&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&t=垃圾回收GC"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFGC"><span class="toc-number">1.</span> <span class="toc-text">什么是GC</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B-%E5%88%86%E5%88%AB%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">垃圾回收算法有哪些 分别的优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">引用计数法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">标记清除法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text">标记整理法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6"><span class="toc-number">2.4.</span> <span class="toc-text">复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text">分代收集法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#go%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%87%E7%94%A8%E6%98%AF%E5%93%AA%E4%B8%AAGC%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">go的垃圾回收采用是哪个GC方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88Go%E9%87%87%E7%94%A8%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E6%B3%95%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%85%B6%E4%BB%96%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">为什么Go采用标记清除法，而不是其他的方法？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95%EF%BC%9Fmark-sweep"><span class="toc-number">5.</span> <span class="toc-text">什么是三色标记法？mark-sweep</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%A0%B9%E5%AF%B9%E8%B1%A1%EF%BC%8C%E6%A0%B9%E5%AF%B9%E8%B1%A1%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">什么是根对象，根对象有哪些？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E7%9A%84%E6%9D%A1%E4%BB%B6%E4%BC%9A%E8%A7%A6%E5%8F%91Go%E7%9A%84GC"><span class="toc-number">7.</span> <span class="toc-text">怎么的条件会触发Go的GC</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#go%E7%9A%84GC%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BC%98%E5%8C%96"><span class="toc-number">8.</span> <span class="toc-text">go的GC有哪些优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%B1%8F%E9%9A%9C-Write-Barrier"><span class="toc-number">8.1.</span> <span class="toc-text">写屏障(Write Barrier) </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%85%E5%8A%A9GC-Mutator-Assist"><span class="toc-number">8.2.</span> <span class="toc-text">辅助GC(Mutator Assist) </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81GC%E7%BC%96%E7%A8%8B"><span class="toc-number">8.3.</span> <span class="toc-text">代码GC编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%87%8F%E5%B0%91%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90%EF%BC%9A"><span class="toc-number">8.3.1.</span> <span class="toc-text">代码减少逃逸分析：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%AE%80%E5%8D%95%E7%9B%B4%E7%99%BD%EF%BC%8C%E5%88%B6%E9%80%A0inline%E6%9C%BA%E4%BC%9A"><span class="toc-number">8.3.2.</span> <span class="toc-text">代码简单直白，制造inline机会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%8F%E5%B0%91%E5%88%86%E9%85%8D%E6%AC%A1%E6%95%B0"><span class="toc-number">8.3.3.</span> <span class="toc-text">减少分配次数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E5%AF%B9%E8%B1%A1"><span class="toc-number">8.3.4.</span> <span class="toc-text">缓存对象</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFinline"><span class="toc-number">9.</span> <span class="toc-text">什么是inline</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90"><span class="toc-number">10.</span> <span class="toc-text">逃逸分析</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        垃圾回收GC
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name"></span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-12-12T17:21:40.000Z" itemprop="datePublished">2021-12-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="什么是GC"><a href="#什么是GC" class="headerlink" title="什么是GC"></a>什么是GC</h1><blockquote>
+<p>GC指一种自动的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%A8%98%E6%86%B6%E9%AB%94%E7%AE%A1%E7%90%86">存储器管理</a>机制，当某个程序占用的一部分内存空间不再被这个程序访问时，这个程序会借助<strong>垃圾回收</strong>算法向操作系统归还这部分内存空间。垃圾回收器可以减轻程序员的负担，也减少程序中的错误。</p>
+</blockquote>
+<blockquote>
+<p>-from wiki</p>
+</blockquote>
+<h1 id="垃圾回收算法有哪些-分别的优缺点"><a href="#垃圾回收算法有哪些-分别的优缺点" class="headerlink" title="垃圾回收算法有哪些 分别的优缺点"></a>垃圾回收算法有哪些 分别的优缺点</h1><h2 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h2><p>对每个对象设置引用计数，当对象被引用+1，失去引用/销毁-1，当计数为0的时回收对象内存</p>
+<p>优点：简单直接，回收速度快</p>
+<p>缺点：需要额外空间维护引用计数，无法解决对象的循环引用问题</p>
+<h2 id="标记清除法"><a href="#标记清除法" class="headerlink" title="标记清除法"></a>标记清除法</h2><p>从根对象开始遍历所有引用对象，引用的对象打上标记tag，遍历完成，将没有标记的进行回收</p>
+<p>优点：解决引用计数法的缺点</p>
+<p>缺点：会产生大量不连续的内存碎片，导致无法给大对象分配内存</p>
+<h2 id="标记整理法"><a href="#标记整理法" class="headerlink" title="标记整理法"></a>标记整理法</h2><p>让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存</p>
+<p>优点：不会产生内存碎片</p>
+<p>缺点：需要移动大量对象，处理效率比较低。</p>
+<h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><p>将内存划分为大小相等的两块，每次只使用其中一块，当这一块内存用完了就将还存活的对象复制到另一块上面，然后再把使用过的内存空间进行一次清理</p>
+<p>优点：不会产生内存碎片，每次清除针对的都是整块内存</p>
+<p>缺点：只使用了内存的一半、移动对象需要耗费时间，效率低于标记清除法</p>
+<h2 id="分代收集法"><a href="#分代收集法" class="headerlink" title="分代收集法"></a>分代收集法</h2><p>按照对象的生命周期长短划分代空间，生命周期长的放在老年代，生命周期短的放在新生代</p>
+<p>优点：回收性能好</p>
+<p>缺点：算法复杂</p>
+<h1 id="go的垃圾回收采用是哪个GC方法"><a href="#go的垃圾回收采用是哪个GC方法" class="headerlink" title="go的垃圾回收采用是哪个GC方法"></a>go的垃圾回收采用是哪个GC方法</h1><p>go采用的是标记清除法，核心就是标记出哪些是内存还在使用（被引用的），哪些内存不再使用（未被引用），把未被引用的内存回收掉，供后续内存分配使用。</p>
+<p>暂时无法在飞书文档外展示此内容</p>
+<p>特殊case：如果内存块存放的是指针，那还需要递归的进行标记，全部标记完后，只保留标记的内存，未被标记的内存全部进行回收</p>
+<h1 id="为什么Go采用标记清除法，而不是其他的方法？"><a href="#为什么Go采用标记清除法，而不是其他的方法？" class="headerlink" title="为什么Go采用标记清除法，而不是其他的方法？"></a>为什么Go采用标记清除法，而不是其他的方法？</h1><p>引用计数无法解决循环引用，排除</p>
+<p>标记整理好处在于解决内存碎片化的问题，但是Go运行时的分配算法基于tcmalloc，基本上没有碎片问题，对于gc并没有提升</p>
+<p>复制只能用一半的内存，还需要大量移动，效率低</p>
+<p>分代收集的话也不适用，因为go的gc主要目标是新创建的对象上，即存活时间短更利回收，而不是频繁的检查所有对象</p>
+<blockquote>
+<p>逃逸分析：编译器决定内存分配的位置，不需要程序员指定。函数中申请一个新的对象</p>
+</blockquote>
+<blockquote>
+<p>如果分配到栈，则函数执行结束就可自动将内存回收</p>
+</blockquote>
+<blockquote>
+<p>如果分配到堆，则函数执行结束可交给GC(垃圾回收)处理</p>
+</blockquote>
+<p>go编译器的逃逸分析，将大部分新生对象存储在栈里面，直接被回收，生命周期短的对象直接回收并不需要gc处理，长期存在的/比较大的对象会分配到堆中，才被gc回收，所以分代回收并没有实质上提升</p>
+<h1 id="什么是三色标记法？mark-sweep"><a href="#什么是三色标记法？mark-sweep" class="headerlink" title="什么是三色标记法？mark-sweep"></a>什么是三色标记法？mark-sweep</h1><p>人为的用三种颜色好描述go的gc过程，内存中的对象并无颜色区分</p>
+<p>三色对应了垃圾回收中的三种状态：</p>
+<p>灰色：对象放入“标记队列”中等待（待处理的对象）</p>
+<p>黑色：对象已被标记为使用</p>
+<p>白色：对象未被标记</p>
+<p>步骤：</p>
+<ol>
+<li><p>开始gc初，所有对象放入白色队列</p>
+</li>
+<li><p>从根对象开始遍历，将所有可达的对象，标记为灰色，放入灰色队列（待处理队列）</p>
+</li>
+<li><p>从灰色队列中取出灰色对象，将它引用的对象标记灰色放入灰色队列，它自己标黑色，放入黑色队列</p>
+</li>
+<li><p>重复步骤3，直到灰色队列为空，这时候白色对象是不可达对象，回收白色对象</p>
+</li>
+</ol>
+<h1 id="什么是根对象，根对象有哪些？"><a href="#什么是根对象，根对象有哪些？" class="headerlink" title="什么是根对象，根对象有哪些？"></a>什么是根对象，根对象有哪些？</h1><ol>
+<li><p>全局变量：程序在编译期就能确定的那些存在于程序整个生命周期的变量</p>
+</li>
+<li><p>执行栈：每个 goroutine 都包含自己的执行栈，这些执行栈上包含栈上的变量及指向分配的堆内存区块的指针</p>
+</li>
+<li><p>寄存器：寄存器的值可能表示一个指针，参与计算的这些指针可能指向某些赋值器分配的堆内存区块</p>
+</li>
+</ol>
+<h1 id="怎么的条件会触发Go的GC"><a href="#怎么的条件会触发Go的GC" class="headerlink" title="怎么的条件会触发Go的GC"></a>怎么的条件会触发Go的GC</h1><ul>
+<li>GOGC threshold</li>
+</ul>
+<p>每次内存分配时检查当前内存分配量是否达到阀值，达到则会触发gc</p>
+<p>阀值 = 上次gc内存分配量 * 内存增长率</p>
+<p>内存增长率是由环境变量GCGO控制，默认是100，即当内存扩大一倍的时候启动gc</p>
+<ul>
+<li>runtime.GC()</li>
+</ul>
+<p>类似Java的system.gc api手动代码触发gc</p>
+<ul>
+<li>runtime.forcegcperiod（2min）</li>
+</ul>
+<p>强制定期gc，默认2min触发一次gc，在runtime/proc.go:forcegcperiod</p>
+<h1 id="go的GC有哪些优化"><a href="#go的GC有哪些优化" class="headerlink" title="go的GC有哪些优化"></a>go的GC有哪些优化</h1><p>标记-清理需要stw，需要暂停所有的goruntine，做gc然后再恢复。</p>
+<p>减少stw时间，可以提升go的gc性能</p>
+<h2 id="写屏障-Write-Barrier"><a href="#写屏障-Write-Barrier" class="headerlink" title="写屏障(Write Barrier) "></a>写屏障(Write Barrier) </h2><p>本质就是每次内存写操作时候，额外执行一小段代码</p>
+<p>写屏障就是让goroutine与GC同时运行的手段，虽然写屏障不能完全消除stw，但是可以大大减少stw时间，类似开关，gc的特定时候开启，开启后指针传递时，把指针标记，即本轮不回收，下次gc再确定</p>
+<h2 id="辅助GC-Mutator-Assist"><a href="#辅助GC-Mutator-Assist" class="headerlink" title="辅助GC(Mutator Assist) "></a>辅助GC(Mutator Assist) </h2><blockquote>
+<p>为了防止内存分配过快，在GC执行过程中，如果goroutine需要分配内存，那么这个goroutine会参与一部分GC的 工作，即帮助GC做一部分工作，这个机制叫作Mutator Assist</p>
+</blockquote>
+<h2 id="代码GC编程"><a href="#代码GC编程" class="headerlink" title="代码GC编程"></a>代码GC编程</h2><p>多制造inline的机会，将新对象尽可能都分配到栈而不是堆，因为go实现了退栈即释放，不影响gc</p>
+<h3 id="代码减少逃逸分析："><a href="#代码减少逃逸分析：" class="headerlink" title="代码减少逃逸分析："></a>代码减少逃逸分析：</h3><ol>
+<li><p>尽量使用局部变量（编译器会根据变量是否被外部引用来决定是否逃逸）</p>
+</li>
+<li><p>参数、返回数值传递值（传指针还是数值，需要修改原值或者内存比较大结构体传指针，而对于只读的占内存较少的结构体，传值获取较好性能）</p>
+</li>
+</ol>
+<h3 id="代码简单直白，制造inline机会"><a href="#代码简单直白，制造inline机会" class="headerlink" title="代码简单直白，制造inline机会"></a>代码简单直白，制造inline机会</h3><h3 id="减少分配次数"><a href="#减少分配次数" class="headerlink" title="减少分配次数"></a>减少分配次数</h3><pre class="line-numbers language-go" data-language="go"><code class="language-go">a <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1234</span><span class="token punctuation">)</span>
+b <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token number">2048</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="缓存对象"><a href="#缓存对象" class="headerlink" title="缓存对象"></a>缓存对象</h3><h1 id="什么是inline"><a href="#什么是inline" class="headerlink" title="什么是inline"></a>什么是inline</h1><blockquote>
+<p><strong>内联扩展</strong>或<strong>内联</strong>是一种手动或<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Compiler_optimization">编译器优化</a>，它用被调用函数的主体替换函数<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Call_site">调用站点</a></p>
+</blockquote>
+<blockquote>
+<p>from wiki</p>
+</blockquote>
+<p>通过参数-gflags=”-m”查看</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">func</span> add <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    x <span class="token operator">:=</span> <span class="token number">1</span>
+    y <span class="token operator">:=</span> <span class="token number">2</span>
+    a <span class="token operator">:=</span> <span class="token function">add</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span>
+    fmt<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    x <span class="token operator">:=</span> <span class="token number">1</span>
+    y <span class="token operator">:=</span> <span class="token number">2</span>
+    <span class="token comment">//inline function add replace by the body of the function</span>
+    a <span class="token operator">:=</span> x <span class="token operator">+</span> y
+    fmt<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>不用使用内联的case：闭包调用、select、for、defer、go关键词创建的协程</p>
+<p>总结：采用越简单的实现，对于傻瓜式语言性能越好</p>
+<h1 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h1><p>通过命令go build -gcflags ‘-m’命令查看</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">var</span> refs <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">fc</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token punctuation">&#123;</span>
+   refs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">new</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+   <span class="token function">fc</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFGC"><span class="toc-number">1.</span> <span class="toc-text">什么是GC</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B-%E5%88%86%E5%88%AB%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">垃圾回收算法有哪些 分别的优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">引用计数法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">标记清除法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text">标记整理法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6"><span class="toc-number">2.4.</span> <span class="toc-text">复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text">分代收集法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#go%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%87%E7%94%A8%E6%98%AF%E5%93%AA%E4%B8%AAGC%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">go的垃圾回收采用是哪个GC方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88Go%E9%87%87%E7%94%A8%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E6%B3%95%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%85%B6%E4%BB%96%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">为什么Go采用标记清除法，而不是其他的方法？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95%EF%BC%9Fmark-sweep"><span class="toc-number">5.</span> <span class="toc-text">什么是三色标记法？mark-sweep</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%A0%B9%E5%AF%B9%E8%B1%A1%EF%BC%8C%E6%A0%B9%E5%AF%B9%E8%B1%A1%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">什么是根对象，根对象有哪些？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E7%9A%84%E6%9D%A1%E4%BB%B6%E4%BC%9A%E8%A7%A6%E5%8F%91Go%E7%9A%84GC"><span class="toc-number">7.</span> <span class="toc-text">怎么的条件会触发Go的GC</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#go%E7%9A%84GC%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BC%98%E5%8C%96"><span class="toc-number">8.</span> <span class="toc-text">go的GC有哪些优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%B1%8F%E9%9A%9C-Write-Barrier"><span class="toc-number">8.1.</span> <span class="toc-text">写屏障(Write Barrier) </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%85%E5%8A%A9GC-Mutator-Assist"><span class="toc-number">8.2.</span> <span class="toc-text">辅助GC(Mutator Assist) </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81GC%E7%BC%96%E7%A8%8B"><span class="toc-number">8.3.</span> <span class="toc-text">代码GC编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%87%8F%E5%B0%91%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90%EF%BC%9A"><span class="toc-number">8.3.1.</span> <span class="toc-text">代码减少逃逸分析：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%AE%80%E5%8D%95%E7%9B%B4%E7%99%BD%EF%BC%8C%E5%88%B6%E9%80%A0inline%E6%9C%BA%E4%BC%9A"><span class="toc-number">8.3.2.</span> <span class="toc-text">代码简单直白，制造inline机会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%8F%E5%B0%91%E5%88%86%E9%85%8D%E6%AC%A1%E6%95%B0"><span class="toc-number">8.3.3.</span> <span class="toc-text">减少分配次数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E5%AF%B9%E8%B1%A1"><span class="toc-number">8.3.4.</span> <span class="toc-text">缓存对象</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFinline"><span class="toc-number">9.</span> <span class="toc-text">什么是inline</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90"><span class="toc-number">10.</span> <span class="toc-text">逃逸分析</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&text=垃圾回收GC"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&is_video=false&description=垃圾回收GC"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=垃圾回收GC&body=Check out this article: https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&title=垃圾回收GC"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&name=垃圾回收GC&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ruihuachen.github.io/2021/12/13/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6GC/&t=垃圾回收GC"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2022
+    Ernest&#39;s blog
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/projects_url">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

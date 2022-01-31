@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="面向对象 怎么理解什么是面向对象？  怎么理解Java中封装、继承、多态？  为什么需要接口？  接口和抽象类的区别？  Object有哪些方法？9个  Object中hashcode是干什么？  Collection集合容器迭代器Itertor是什么？  “&#x3D;&#x3D;”和equals区别？  hashcode和equals有什么联系  浅拷贝和深拷贝是什么 区别？  Java反射？  Java异常有哪">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础知识点归纳">
+<meta property="og:url" content="https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/index.html">
+<meta property="og:site_name" content="Ernest&#39;s blog">
+<meta property="og:description" content="面向对象 怎么理解什么是面向对象？  怎么理解Java中封装、继承、多态？  为什么需要接口？  接口和抽象类的区别？  Object有哪些方法？9个  Object中hashcode是干什么？  Collection集合容器迭代器Itertor是什么？  “&#x3D;&#x3D;”和equals区别？  hashcode和equals有什么联系  浅拷贝和深拷贝是什么 区别？  Java反射？  Java异常有哪">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-04-02T12:56:09.000Z">
+<meta property="article:modified_time" content="2021-12-11T14:35:37.306Z">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Java基础知识点归纳</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/projects_url">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/04/11/%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AE%B0%E5%BF%86%E7%82%B9-%E8%A1%A5%E5%85%85/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/02/02/%E9%80%81%E4%BD%A0%E4%B8%80%E6%9C%B5%E5%B0%8F%E7%BA%A2%E8%8A%B1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&text=Java基础知识点归纳"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&is_video=false&description=Java基础知识点归纳"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java基础知识点归纳&body=Check out this article: https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&name=Java基础知识点归纳&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&t=Java基础知识点归纳"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.</span> <span class="toc-text">面向对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%B9%E5%99%A8%EF%BC%9F%EF%BC%88%E6%AF%8F%E4%B8%AA%E5%AE%B9%E5%99%A8%E5%BA%95%E5%B1%82%E9%9C%80%E8%A6%81%E7%90%86%E8%A7%A3%E6%8E%8C%E6%8F%A1-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">Java有哪些容器？（每个容器底层需要理解掌握 + 应用场景）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9Fps%EF%BC%9A%E5%8D%8F%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">3.</span> <span class="toc-text">进程和线程的区别？ps：协程是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">4.</span> <span class="toc-text">Java虚拟机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring"><span class="toc-number">5.</span> <span class="toc-text">Spring</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">6.</span> <span class="toc-text">数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">7.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E7%9A%84%E4%BA%94%E5%A4%A7%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-number">8.</span> <span class="toc-text">Redis的五大基本类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RocketMQ"><span class="toc-number">9.</span> <span class="toc-text">RocketMQ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E5%85%85"><span class="toc-number">10.</span> <span class="toc-text">补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E5%92%8C%E7%AE%97%E6%B3%95"><span class="toc-number">11.</span> <span class="toc-text">SQL和算法</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Java基础知识点归纳
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name"></span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-04-02T12:56:09.000Z" itemprop="datePublished">2021-04-02</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Java/" rel="tag">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h3><ul>
+<li><p>怎么理解什么是面向对象？</p>
+</li>
+<li><p>怎么理解Java中封装、继承、多态？</p>
+</li>
+<li><p>为什么需要接口？</p>
+</li>
+<li><p>接口和抽象类的区别？</p>
+</li>
+<li><p>Object有哪些方法？9个</p>
+</li>
+<li><p>Object中hashcode是干什么？</p>
+</li>
+<li><p>Collection集合容器迭代器Itertor是什么？</p>
+</li>
+<li><p>“==”和equals区别？</p>
+</li>
+<li><p>hashcode和equals有什么联系</p>
+</li>
+<li><p>浅拷贝和深拷贝是什么 区别？</p>
+</li>
+<li><p>Java反射？</p>
+</li>
+<li><p>Java异常有哪些？</p>
+</li>
+<li><p>Java的error有哪些？</p>
+</li>
+</ul>
+<hr>
+<h3 id="Java有哪些容器？（每个容器底层需要理解掌握-应用场景）"><a href="#Java有哪些容器？（每个容器底层需要理解掌握-应用场景）" class="headerlink" title="Java有哪些容器？（每个容器底层需要理解掌握 + 应用场景）"></a>Java有哪些容器？（每个容器底层需要理解掌握 + 应用场景）</h3><ul>
+<li><p>HashMap底层是怎样的？ jdk1.7和1.8有什么区别</p>
+</li>
+<li><p>HashMap怎么扩容的？</p>
+</li>
+<li><p>HashMap在扩容的时候插入元素会怎样？</p>
+</li>
+<li><p>为什么HashMap在多线程下会出现线程安全问题-死循环？</p>
+</li>
+<li><p>ConcurrentHashMap怎么实现线程安全的？ jdk1.7和1.8</p>
+</li>
+<li><p>LinkedHashMap底层是怎样的，怎么实现有序插入？</p>
+</li>
+</ul>
+<hr>
+<h3 id="进程和线程的区别？ps：协程是什么"><a href="#进程和线程的区别？ps：协程是什么" class="headerlink" title="进程和线程的区别？ps：协程是什么"></a>进程和线程的区别？ps：协程是什么</h3><ul>
+<li><p>进程的通信方式有哪些？哪个比较高效，为什么？</p>
+</li>
+<li><p>线程的通信方式有哪些？（线程通信指的是线程互斥同步）</p>
+</li>
+<li><p>线程有哪些状态？每个状态具体操作是？</p>
+</li>
+<li><p>如何创建线程？</p>
+</li>
+<li><p>继承Thread和实现Runnable区别</p>
+</li>
+<li><p>实现Runnable和Callable有什么区别</p>
+</li>
+<li><p>线程池有哪些？</p>
+</li>
+<li><p>线程池有哪些参数，每个代表什么？</p>
+</li>
+<li><p>线程池的拒绝策略有哪些？</p>
+</li>
+<li><p>线程池工作机制，每一步是怎样的？</p>
+</li>
+<li><p>有哪些阻塞队列？分别作用？</p>
+</li>
+<li><p>CyclicBarrier、CountDownLatch、Semaphore 的用法</p>
+</li>
+<li><p>start和run的区别？</p>
+</li>
+<li><p>wait和sleep的区别？</p>
+</li>
+<li><p>如何解决多线程并发问题？加锁有哪些？</p>
+</li>
+<li><p>synchronized 和 ReentrantLock的区别</p>
+</li>
+<li><p>什么是CAS、AQS 应用场景有哪里？</p>
+</li>
+<li><p>CountDownLatch是什么？</p>
+</li>
+<li><p>ThreadLocal是什么？（线程本地变量/存储）</p>
+</li>
+<li><p>Java内存模型是怎样的？</p>
+</li>
+<li><p>Volatile是解决什么问题？</p>
+</li>
+<li><p>Volatile和Synchronized区别</p>
+</li>
+<li><p>synchronized怎么优化加锁过程？锁升级、锁消除过程</p>
+</li>
+<li><p>什么是AQS？（AbstractQueuedSynchronizer）</p>
+</li>
+<li><p>什么是乐观锁、悲观锁？</p>
+</li>
+</ul>
+<hr>
+<h3 id="Java虚拟机"><a href="#Java虚拟机" class="headerlink" title="Java虚拟机"></a>Java虚拟机</h3><ul>
+<li>运行时数据区域&lt;图&gt; 各个区域分别的指责是什么？</li>
+<li>垃圾回收？在哪些区域GC？</li>
+<li>如何判断一个对象是否可回收？</li>
+<li>GCRoot包含哪些内容？</li>
+<li>方法区的回收有哪些对象</li>
+<li>垃圾回收算法有哪些？分别是怎样GC过程？ 分代收集算法指的是？</li>
+<li>垃圾收集器有哪些？  重点CMS和G1收集器（concurrent mark sweep）</li>
+<li>回收策略：什么时候会发生YoungGC / FullGC（场景）（考虑Eden、Survivor）</li>
+<li>什么时候会发生FullGC？(Concurrent Mode Failure)（具体使用场景会是怎样会）</li>
+<li>内存分配策略有哪些？对象分配优先在哪？如果是大对象尼？</li>
+<li>是不是一收集完就开始GC？为什么</li>
+<li>类加载机制是怎样？每个步骤分别指责是？</li>
+<li>类加载器有哪些？（三种）</li>
+<li>什么是双亲委派模型？作用是什么？(可以加上自定义类加载器extends ClassLoader 重写findClass方法)（ClassNotFoundException）</li>
+<li>什么NIO</li>
+</ul>
+<hr>
+<h3 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h3><ul>
+<li>Spring和SpringBoot的区别</li>
+<li>Spring的IOC 和 AOP</li>
+<li>依赖注入DI有哪些</li>
+<li>Spring的实现事务的方式有哪些</li>
+<li>Spring的事务传播级别有哪些</li>
+<li>Spring的事务隔离级别有哪些</li>
+<li>@Autowird怎么注入（类型 名称）</li>
+<li>Spring中有哪些设计模式？分别有哪些</li>
+<li>Spring的单例模式是严格的单例模式吗？为什么</li>
+<li>有哪些方法可以实现单例模式？</li>
+<li>Spring的三级缓存了解吗</li>
+</ul>
+<hr>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><ul>
+<li>数据库的事务特性？（四个）</li>
+<li>事务并发一致性问题有哪些？分别过程是怎样？（丢失修改）</li>
+<li>怎么分别解决并发一致性问题？</li>
+<li>事务隔离级别有哪些？</li>
+<li>什么是MVCC？怎么解决并发一致性问题</li>
+<li>MVCC解决了哪两种隔离级别？</li>
+<li>undo日志用来干嘛？biglog日志？redo日志？</li>
+<li>如何解决幻读问题？（在X隔离级别使用XX和XX）</li>
+<li>Net-Key Lock包含什么？</li>
+<li>快照读和当前读的区别？</li>
+<li>数据库三范式指的哪些？</li>
+<li>select where group by having</li>
+<li>inner join left join right join</li>
+<li>between order by 顺序</li>
+<li>SQL优化有哪些？（结构优化 + 查询优化）</li>
+<li>MySQL主从复制怎样实现？</li>
+<li>为什么读写分离？</li>
+<li>为什么需要分库分表？</li>
+<li>怎样分库分表？</li>
+<li>行级锁和表级锁？（基于索引）</li>
+</ul>
+<hr>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><ul>
+<li>MySQL索引底层怎么实现的？</li>
+<li>为什么使用B+树而不是二叉搜索树或者红黑树？</li>
+<li>聚簇索引和非聚簇索引是什么？</li>
+<li>自适应哈希索引？</li>
+<li>联合索引？最左匹配原则？</li>
+<li>索引优化有哪些？（哪些情况下索引会失效？）</li>
+<li>索引的优点有哪些？</li>
+<li>索引使用条件，是不是越多越好？为什么</li>
+<li>查询性能优化方式有哪些？</li>
+<li>innoDB和MyISAM有什么区别？</li>
+<li>MySQL数据类型有哪些（tinyint、smallInt、mediumInt、int、bigInt）[8,16,24,32,64位]</li>
+<li>int（11）数字代表什么？</li>
+</ul>
+<hr>
+<h3 id="Redis的五大基本类型"><a href="#Redis的五大基本类型" class="headerlink" title="Redis的五大基本类型"></a>Redis的五大基本类型</h3><ul>
+<li>键都是字符串，值是不同的对象类型</li>
+<li>Redis的过期键删除策略有哪些（三种）分别是怎样，优缺点</li>
+<li>Redis的持久化机制会有哪些（两种）分别是怎样的，优缺点</li>
+<li>如果一边执行持久化机制，一边执行过期删除策略，redis会是怎样的操作行为？</li>
+<li>Redis的AOF是怎样实现？</li>
+<li>AOF重写是怎样的？</li>
+<li>AOF重写期间服务器进行命令处理，导致数据不一致怎么办？</li>
+<li>为什么Redis支持高并发量，速度快？</li>
+<li>Redis单线程是指的是什么单线程?</li>
+<li>Redis分片有了解吗?</li>
+<li>Redis怎么实现主从复制？</li>
+<li>Redis的内存淘汰策略有哪些？</li>
+<li>Redis中会出现哪些问题？（雪崩、击穿、穿透）</li>
+<li>如何保证redis和DB数据一致性问题？<a target="_blank" rel="noopener" href="https://dler.cloud/subscribe/C7CwhGaDo3h1s1hH?mu=ssr">https://dler.cloud/subscribe/C7CwhGaDo3h1s1hH?mu=ssr</a></li>
+</ul>
+<hr>
+<h3 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a>RocketMQ</h3><ul>
+<li>RocketMQ怎么实现这么高的吞吐量的？</li>
+<li>RocketMQ怎么保证消息不丢失？</li>
+<li>RocketMQ怎么保证消息不重复消费？</li>
+<li>RocketMQ怎么保证消息的有序性？</li>
+</ul>
+<hr>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><ul>
+<li>Java的序列化有哪些？</li>
+<li>关于spring的问题补充</li>
+<li>rocketMQ的问题补充</li>
+<li>mySQL的问题</li>
+<li>Redis的问题补充</li>
+<li>bitmap</li>
+<li>topK的问题</li>
+<li>场景设计题目补充</li>
+</ul>
+<hr>
+<h3 id="SQL和算法"><a href="#SQL和算法" class="headerlink" title="SQL和算法"></a>SQL和算法</h3>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.</span> <span class="toc-text">面向对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%B9%E5%99%A8%EF%BC%9F%EF%BC%88%E6%AF%8F%E4%B8%AA%E5%AE%B9%E5%99%A8%E5%BA%95%E5%B1%82%E9%9C%80%E8%A6%81%E7%90%86%E8%A7%A3%E6%8E%8C%E6%8F%A1-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">Java有哪些容器？（每个容器底层需要理解掌握 + 应用场景）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9Fps%EF%BC%9A%E5%8D%8F%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">3.</span> <span class="toc-text">进程和线程的区别？ps：协程是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">4.</span> <span class="toc-text">Java虚拟机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring"><span class="toc-number">5.</span> <span class="toc-text">Spring</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">6.</span> <span class="toc-text">数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">7.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E7%9A%84%E4%BA%94%E5%A4%A7%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-number">8.</span> <span class="toc-text">Redis的五大基本类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RocketMQ"><span class="toc-number">9.</span> <span class="toc-text">RocketMQ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E5%85%85"><span class="toc-number">10.</span> <span class="toc-text">补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E5%92%8C%E7%AE%97%E6%B3%95"><span class="toc-number">11.</span> <span class="toc-text">SQL和算法</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&text=Java基础知识点归纳"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&is_video=false&description=Java基础知识点归纳"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java基础知识点归纳&body=Check out this article: https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&title=Java基础知识点归纳"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&name=Java基础知识点归纳&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ruihuachen.github.io/2021/04/02/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3/&t=Java基础知识点归纳"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2022
+    Ernest&#39;s blog
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/projects_url">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
