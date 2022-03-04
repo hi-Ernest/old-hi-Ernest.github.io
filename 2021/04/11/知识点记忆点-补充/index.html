@@ -108,13 +108,11 @@ Java基础抽象类和接口的区分？什"><meta name="twitter:site" content="
 <h4 id="MVCC解决了哪两种隔离级别？"><a href="#MVCC解决了哪两种隔离级别？" class="headerlink" title="MVCC解决了哪两种隔离级别？"></a>MVCC解决了哪两种隔离级别？</h4><p>提交读 和 可重复读</p>
 <hr>
 <h4 id="如何解决幻读问题？（在X隔离级别使用XX和XX）"><a href="#如何解决幻读问题？（在X隔离级别使用XX和XX）" class="headerlink" title="如何解决幻读问题？（在X隔离级别使用XX和XX）"></a>如何解决幻读问题？（在X隔离级别使用XX和XX）</h4><p><em><strong>可重复读隔离级别 + Next-key locks</strong></em></p>
-<pre class="line-numbers language-none"><code class="language-none">Next-key Lock: &#123;
-	1. record lock (锁一个记录上的索引，而不是记录本身，没有索引自动在主键上创建聚簇索引)
-	2. gap lock （锁定索引之间的间隙，但不包括索引本身）
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
+<pre><code>Next-key Lock: &#123;
+    1. record lock (锁一个记录上的索引，而不是记录本身，没有索引自动在主键上创建聚簇索引)
+    2. gap lock （锁定索引之间的间隙，但不包括索引本身）
+&#125;
+</code></pre>
 <h4 id="间隙锁锁的是哪些范围？什么操作导致间隙锁"><a href="#间隙锁锁的是哪些范围？什么操作导致间隙锁" class="headerlink" title="间隙锁锁的是哪些范围？什么操作导致间隙锁"></a>间隙锁锁的是哪些范围？什么操作导致间隙锁</h4><h4 id="快照读和当前读的区别？"><a href="#快照读和当前读的区别？" class="headerlink" title="快照读和当前读的区别？"></a>快照读和当前读的区别？</h4><p>select XXX 进行快照读 从undo log中快照获取</p>
 <p>select XX for update 加锁保证拿取最新的数据</p>
 <p>每条记录更新同时记录一条回滚记录（回滚操作记录undo log）</p>
@@ -197,10 +195,9 @@ Java基础抽象类和接口的区分？什"><meta name="twitter:site" content="
 <p>b = ‘’ and a = ‘’ （只会走主键a，因为B+树索引结构）</p>
 <hr>
 <h4 id="Where和Order-by-索引字段"><a href="#Where和Order-by-索引字段" class="headerlink" title="Where和Order by 索引字段"></a>Where和Order by 索引字段</h4><p>使用联合索引idx（a,b）</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">//可以走索引idx</span>
-<span class="token keyword">where</span> a <span class="token operator">=</span> <span class="token string">"xx"</span> <span class="token keyword">order</span> <span class="token keyword">by</span> b
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
+<pre><code class="sql">//可以走索引idx
+where a = &quot;xx&quot; order by b
+</code></pre>
 <p>Mysql的order by 会根据创建联合索引顺序进行排序 且asc</p>
 <p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9641463/mysql-not-using-index-for-order-by/38071094">https://stackoverflow.com/questions/9641463/mysql-not-using-index-for-order-by/38071094</a></p>
 <hr>
