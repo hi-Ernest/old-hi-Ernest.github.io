@@ -50,7 +50,8 @@ highlight:
   tab_replace: ''
   wrap: false
   hljs: false
-prismjs:
+
+prism_plugin:
   enable: true
   preprocess: true
   line_number: true
@@ -130,12 +131,6 @@ feed:
   content:
   content_limit: 140
   content_limit_delim: ' '
-
-# For syntax highlighting
-prism_plugin:
-  mode: 'preprocess'
-  theme: 'default'
-  line_number: true 
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
