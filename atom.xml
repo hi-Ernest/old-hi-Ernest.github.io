@@ -6,10 +6,32 @@
   <link href="https://ruihuachen.github.io/atom.xml" rel="self"/>
   
   <link href="https://ruihuachen.github.io/"/>
-  <updated>2022-04-17T17:46:44.993Z</updated>
+  <updated>2022-07-19T15:26:53.512Z</updated>
   <id>https://ruihuachen.github.io/</id>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>工作两年了</title>
+    <link href="https://ruihuachen.github.io/2022/07/19/%E5%B7%A5%E4%BD%9C%E4%B8%A4%E5%B9%B4%E4%BA%86/"/>
+    <id>https://ruihuachen.github.io/2022/07/19/%E5%B7%A5%E4%BD%9C%E4%B8%A4%E5%B9%B4%E4%BA%86/</id>
+    <published>2022-07-19T15:19:24.000Z</published>
+    <updated>2022-07-19T15:26:53.512Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;时光飞逝从2020-07-13到了2022-07-13，早已想写下此文来回顾和总结过去以及对今后岁月的展望，这几天在清晨骑车上班路上、或做核酸的路上…不断思考这两年给我改变是什么…但忙的需求开发与联调于是搁置到今天0716周六的午后来启文。&lt;/p&gt;
+&lt;p&gt;自身的变化关键词归</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>思考:现在为了什么而工作?</title>
@@ -445,27 +467,6 @@ public void sort(int nums)</summary>
     
     
     <category term="书" scheme="https://ruihuachen.github.io/tags/%E4%B9%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="https://ruihuachen.github.io/2021/01/01/hello-world/"/>
-    <id>https://ruihuachen.github.io/2021/01/01/hello-world/</id>
-    <published>2021-01-01T06:24:22.000Z</published>
-    <updated>2021-12-11T16:50:34.211Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
-        
-      
-    
-    
-    
     
   </entry>
   
