@@ -34,27 +34,6 @@
   </entry>
   
   <entry>
-    <title>思考:现在为了什么而工作?</title>
-    <link href="https://ruihuachen.github.io/2022/04/18/%E6%80%9D%E8%80%83-%E7%8E%B0%E5%9C%A8%E4%B8%BA%E4%BA%86%E4%BB%80%E4%B9%88%E8%80%8C%E5%B7%A5%E4%BD%9C/"/>
-    <id>https://ruihuachen.github.io/2022/04/18/%E6%80%9D%E8%80%83-%E7%8E%B0%E5%9C%A8%E4%B8%BA%E4%BA%86%E4%BB%80%E4%B9%88%E8%80%8C%E5%B7%A5%E4%BD%9C/</id>
-    <published>2022-04-17T17:43:15.000Z</published>
-    <updated>2022-04-17T17:46:44.993Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;每一代人有每一代人的焦虑和迷茫，痛苦和不知所措。这是我们身而为人，在时间裹挟下，成长路途不可避免遭遇的事情，最关键是不要用娱乐和忙碌去逃避存在的问题，而是静下心来，闭上眼深呼吸，问自己，自己想要的到底是什么，每条路不同选择背后的利与弊，自己更愿意选择哪一条路，静静地慢慢地倾</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>2022/03/09</title>
     <link href="https://ruihuachen.github.io/2022/03/09/2022-03-09/"/>
     <id>https://ruihuachen.github.io/2022/03/09/2022-03-09/</id>
@@ -78,32 +57,11 @@
   </entry>
   
   <entry>
-    <title>竹轩双子帝都汇首</title>
-    <link href="https://ruihuachen.github.io/2022/03/06/%E7%AB%B9%E8%BD%A9%E5%8F%8C%E5%AD%90%E5%B8%9D%E9%83%BD%E6%B1%87%E9%A6%96/"/>
-    <id>https://ruihuachen.github.io/2022/03/06/%E7%AB%B9%E8%BD%A9%E5%8F%8C%E5%AD%90%E5%B8%9D%E9%83%BD%E6%B1%87%E9%A6%96/</id>
-    <published>2022-03-05T16:19:00.000Z</published>
-    <updated>2022-03-09T13:17:14.049Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;来帝都已经十个月有余了，终于和老苗碰面了。支付宝行走走了一万多步，两个人从工作谈到生活日常，在到实事政事…聊得挺多的，在双安商场那边，到新中关下午三点开始吃个火锅，在中关村广场逛逛回到我目前住的地方，充手机电也继续聊了聊。在交谈过后，感觉老苗其实是我们大学宿舍中最知道自己想</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>2021年终总结</title>
     <link href="https://ruihuachen.github.io/2022/01/31/2021%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/"/>
     <id>https://ruihuachen.github.io/2022/01/31/2021%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</id>
     <published>2022-01-31T09:55:58.000Z</published>
-    <updated>2022-01-31T15:19:00.768Z</updated>
+    <updated>2022-03-04T17:55:46.915Z</updated>
     
     
       
@@ -220,8 +178,8 @@
       
         
         
-    <summary type="html">&lt;pre class=&quot;line-numbers language-java&quot; data-language=&quot;java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&amp;#x2F;&amp;#x2F;快速排序
-public void sort(int nums)</summary>
+    <summary type="html">&lt;pre class=&quot;line-numbers language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token comment&quot; spellcheck=&quot;true&quot;&gt;//快速排序&lt;/span&gt;
+&lt;span</summary>
         
       
     
@@ -467,6 +425,51 @@ public void sort(int nums)</summary>
     
     
     <category term="书" scheme="https://ruihuachen.github.io/tags/%E4%B9%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="https://ruihuachen.github.io/2021/01/01/hello-world/"/>
+    <id>https://ruihuachen.github.io/2021/01/01/hello-world/</id>
+    <published>2021-01-01T06:24:22.000Z</published>
+    <updated>2021-12-11T16:50:34.211Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>2021/08/16有感</title>
+    <link href="https://ruihuachen.github.io/2020/08/16/2020-08-16/"/>
+    <id>https://ruihuachen.github.io/2020/08/16/2020-08-16/</id>
+    <published>2020-08-15T16:00:00.000Z</published>
+    <updated>2022-01-23T12:45:24.076Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在周五时候，人更加的迷茫和不知所措，好像每次在不同的环境，阶段都会有疑惑和无力感。&lt;br&gt;昨天去跑步，时隔好多天的运动，在过程中我也在思考自己的现阶段到底顾虑什么，焦虑什么，那如何解决尼&lt;/p&gt;
+&lt;p&gt;我想把这些东西列出：&lt;br&gt;工作上：工作的意义到底是什么？很多老套说为了</summary>
+        
+      
+    
+    
+    
+    
+    <category term="生活" scheme="https://ruihuachen.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
     
   </entry>
   

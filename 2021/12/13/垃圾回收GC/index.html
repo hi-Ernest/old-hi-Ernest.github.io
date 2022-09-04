@@ -1,17 +1,148 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>垃圾回收GC · Ernest's blog</title><meta name="description" content="什么是GC
-GC指一种自动的存储器管理机制，当某个程序占用的一部分内存空间不再被这个程序访问时，这个程序会借助垃圾回收算法向操作系统归还这部分内存空间。垃圾回收器可以减轻程序员的负担，也减少程序中的错误。
+<!DOCTYPE html>
+<html lang="en">
 
 
--from wiki
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>
+    垃圾回收GC | Ernest&#39;s blog
+  </title>
+  <meta name="description" content="">
+  
+  <meta name="keywords" content="
+  
+  ">
+  
+  <meta name="author" content="">
 
-垃圾回收算法有哪些 分别的优缺点引用计数法对每个对象设置引用计数，"><meta name="og:description" content="什么是GC
-GC指一种自动的存储器管理机制，当某个程序占用的一部分内存空间不再被这个程序访问时，这个程序会借助垃圾回收算法向操作系统归还这部分内存空间。垃圾回收器可以减轻程序员的负担，也减少程序中的错误。
+  <meta http-equiv="Cache-Control" content="no-transform"/>
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="theme-color" content="#1e2327">
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/apple-touch-icon-180x180.png">
+
+  <link rel="icon" type="image/x-icon" href="https://github.githubassets.com/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.25-csp/vue.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Ernest's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body id="replica-app">
+
+<nav class="navbar-wrapper">
+  <div class="navbar">
+    <div class="container clearfix">
+      <a href="/" class="navbar-logo"><i class="fa fa-github"></i></a>
+
+      <div class="navbar-search float-left desktop-only">
+        <div class="navbar-search-form">
+          <label for="gsc-i-id1">This website</label>
+          <div id="google-search">
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+      </div>
+
+      <ul class="navbar-nav float-left">
+        
+        <li><a href="/">Archives</a></li>
+        
+        
+        <li><a href="/">Categories</a></li>
+        
+        
+        <li><a href="/">Tags</a></li>
+        
+        
+        <li class="desktop-only"><a href="/atom.xml" target="_blank">RSS</a></li>
+        
+      </ul>
+
+      <ul class="navbar-nav user-nav float-right desktop-only">
+        <li class="user-nav-notification">
+          <a><span class="user-nav-unread"></span><i class="fa fa-bell"></i></a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus"></i> <i class="fa fa-caret-down"></i></a>
+        </li>
+        <li class="user-nav-logo">
+          <a><img src="https://octodex.github.com/images/baracktocat.jpg"> <i class="fa fa-caret-down"></i></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <header class="header-wrapper desktop-only">
+  <div class="container header-site-detail">
+    <ul class="header-toolbar">
+      <li class="clearfix">
+        <a href="/" class="header-toolbar-left"><i
+                  class="fa fa-file-text"></i> Posts </a>
+        <a href="/"
+           class="header-toolbar-right"> 20 </a>
+      </li>
+      <li>
+        <a href="/" class="header-toolbar-left"><i
+                  class="fa fa-tags"></i> Tags </a>
+        <a href="/"
+           class="header-toolbar-right"> 6 </a>
+      </li>
+      <li>
+        <a href="/" class="header-toolbar-left"><i
+                  class="fa fa-folder-open"></i> Categories </a>
+        <a href="/"
+           class="header-toolbar-right"> 0 </a>
+      </li>
+    </ul>
+    <h2 class="header-title">
+      <i class="fa fa-book text-muted"></i>
+      <a href="/">Ernest&#39;s blog</a>
+      
+      
+    </h2>
+  </div>
+
+  <div class="container">
+    <div class="header-tab-wrapper clearfix">
+      <span class="header-tab header-tab-selected"><i class="fa fa-thumbs-o-up"></i> Like</span>
+      <span class="header-tab"><i class="fa fa-share-alt"></i> Share</span>
+      <span class="header-tab"><i class="fa fa-comments-o"></i> Discussion</span>
+      <span class="header-tab"><i class="fa fa-bookmark-o"></i> Bookmark </span>
+      <span class="header-tab"><i class="fa fa-smile-o"></i> Smile <i class="fa fa-caret-down"></i></span>
+    </div>
+  </div>
+</header>
 
 
--from wiki
+<div class="post-container container">
+  <h3>
+    <i class="fa fa-user-o"></i>
+    
 
-垃圾回收算法有哪些 分别的优缺点引用计数法对每个对象设置引用计数，"><meta name="twitter:site" content="Ernest's blog"><meta name="twitter:title" content="垃圾回收GC"><meta name="twitter:card" content="summary"><meta name="keywords" content=""><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head><body><div id="stage" class="container"><div class="row"><div id="side-bar" class="col-sm-3 col-xs-12 side-container invisible"><div class="vertical-text site-title"><h3 tabindex="-1" class="site-title-small"><a href="/" class="a-title">Get better every day</a></h3><h1 tabindex="-1" class="site-title-large"><a href="/" class="a-title">日拱一卒</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div id="site-nav" class="site-title-links"><ul><li><a href="/">Home</a></li><li><a href="/archives">Archive</a></li><li><a href="/tags">Tags</a></li><li><a href="/about-me/index.html">about me</a></li><li><a href="/works/index.html">resume</a></li><li class="soc"><a href="https://ruihuachen.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2022&nbsp;<a target="_blank" href="https://ruihuachen.github.io" rel="noopener noreferrer">Ernest's blog</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div id="main-container" class="col-sm-9 col-xs-12 main-container invisible"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>垃圾回收GC</a></p><p class="post-meta"><span class="date meta-item">Posted at&nbsp;2021-12-13</span></p><p class="post-abstract"><h1 id="什么是GC"><a href="#什么是GC" class="headerlink" title="什么是GC"></a>什么是GC</h1><blockquote>
+    <span class="post-date float-right" title="{{moment(1639329700000).format('MMM DD, YYYY, h:mm:ss A')}}">
+      
+          <i class="fa fa-pencil-square-o"></i>
+      
+      {{moment(1639329700000).fromNow()}}
+    </span>
+  </h3>
+
+  <article class="post-content">
+    <h1>垃圾回收GC</h1>
+    <h1 id="什么是GC"><a href="#什么是GC" class="headerlink" title="什么是GC"></a>什么是GC</h1><blockquote>
 <p>GC指一种自动的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%A8%98%E6%86%B6%E9%AB%94%E7%AE%A1%E7%90%86">存储器管理</a>机制，当某个程序占用的一部分内存空间不再被这个程序访问时，这个程序会借助<strong>垃圾回收</strong>算法向操作系统归还这部分内存空间。垃圾回收器可以减轻程序员的负担，也减少程序中的错误。</p>
 </blockquote>
 <blockquote>
@@ -101,9 +232,9 @@ GC指一种自动的存储器管理机制，当某个程序占用的一部分内
 <li><p>参数、返回数值传递值（传指针还是数值，需要修改原值或者内存比较大结构体传指针，而对于只读的占内存较少的结构体，传值获取较好性能）</p>
 </li>
 </ol>
-<h3 id="代码简单直白，制造inline机会"><a href="#代码简单直白，制造inline机会" class="headerlink" title="代码简单直白，制造inline机会"></a>代码简单直白，制造inline机会</h3><h3 id="减少分配次数"><a href="#减少分配次数" class="headerlink" title="减少分配次数"></a>减少分配次数</h3><pre class="line-numbers language-go" data-language="go"><code class="language-go">a &#x3D; make([]int, 0, 1234)
-b &#x3D; make(map[string]int, 2048)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
+<h3 id="代码简单直白，制造inline机会"><a href="#代码简单直白，制造inline机会" class="headerlink" title="代码简单直白，制造inline机会"></a>代码简单直白，制造inline机会</h3><h3 id="减少分配次数"><a href="#减少分配次数" class="headerlink" title="减少分配次数"></a>减少分配次数</h3><pre class="line-numbers language-go"><code class="language-go">a <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1234</span><span class="token punctuation">)</span>
+b <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token number">2048</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <h3 id="缓存对象"><a href="#缓存对象" class="headerlink" title="缓存对象"></a>缓存对象</h3><h1 id="什么是inline"><a href="#什么是inline" class="headerlink" title="什么是inline"></a>什么是inline</h1><blockquote>
 <p><strong>内联扩展</strong>或<strong>内联</strong>是一种手动或<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Compiler_optimization">编译器优化</a>，它用被调用函数的主体替换函数<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Call_site">调用站点</a></p>
 </blockquote>
@@ -111,34 +242,74 @@ b &#x3D; make(map[string]int, 2048)<span aria-hidden="true" class="line-numbe
 <p>from wiki</p>
 </blockquote>
 <p>通过参数-gflags=”-m”查看</p>
-<pre class="line-numbers language-go" data-language="go"><code class="language-go">func add (x, y int) &#123;
-    return x + y
-&#125;
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">add</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 
-func main() &#123;
-    x :&#x3D; 1
-    y :&#x3D; 2
-    a :&#x3D; add(x,y)
-    fmt.println(a)
-&#125;
-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    x <span class="token operator">:=</span> <span class="token number">1</span>
+    y <span class="token operator">:=</span> <span class="token number">2</span>
+    a <span class="token operator">:=</span> <span class="token function">add</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span>
+    fmt<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>\<span class="token operator">-</span>
 
-func main() &#123;
-    x :&#x3D; 1
-    y :&#x3D; 2
-    &#x2F;&#x2F;inline function add replace by the body of the function
-    a :&#x3D; x + y
-    fmt.println(a)
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    x <span class="token operator">:=</span> <span class="token number">1</span>
+    y <span class="token operator">:=</span> <span class="token number">2</span>
+    <span class="token comment" spellcheck="true">//inline function add replace by the body of the function</span>
+    a <span class="token operator">:=</span> x <span class="token operator">+</span> y
+    fmt<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>不用使用内联的case：闭包调用、select、for、defer、go关键词创建的协程</p>
 <p>总结：采用越简单的实现，对于傻瓜式语言性能越好</p>
 <h1 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h1><p>通过命令go build -gcflags ‘-m’命令查看</p>
-<pre class="line-numbers language-go" data-language="go"><code class="language-go">var refs &#x3D; make([]*int, 32)
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">var</span> refs <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
 
-func fc()  &#123;
-   refs[0] &#x3D; new(int)
-&#125;
-func main() &#123;
-   fc()
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></p></div><div class="share"><span>Share</span>&nbsp;<span class="soc"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></span><span class="soc"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></span><span class="soc"><a target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ruihuachen.github.io/2021/12/13/垃圾回收GC/%20Ernest's blog%20垃圾回收GC" class="fa fa-twitter"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2021/12/16/%E6%9C%80%E8%BF%91%E9%A3%8E%E6%B3%A2%E6%84%9F%E5%8F%97/" title="最近风波感受"><i class="fa fa-angle-double-left"></i>&nbsp;Previous post: 最近风波感受</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2021/12/13/%E4%B8%80%E5%8F%AA%E8%88%B9%E7%9A%84%E5%AD%A4%E7%8B%AC/" title="一只船的孤独">Next post: 一只船的孤独&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2022&nbsp;<a target="_blank" href="https://ruihuachen.github.io" rel="noopener noreferrer">Ernest's blog</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script></body></html>
+<span class="token keyword">func</span> <span class="token function">fc</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+   refs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">new</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+   <span class="token function">fc</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+  </article>
+</div>
+
+
+    
+
+
+
+
+</div>
+
+<div class="footer-wrapper container">
+  <footer class="footer clearfix">
+    <div class="clearfix">
+    <a href="https://ruihuachen.github.io" class="footer-logo">
+      <i class="fa fa-github"></i>
+    </a>
+    <ul class="footer-social-link">
+      <li>© 2019 </li>
+      <li><a href="https://ruihuachen.github.io">Home</a></li>
+      
+    </ul>
+    <div class="footer-theme-info">
+      Theme <a target="_blank" rel="noopener" href="//github.com/sabrinaluo/hexo-theme-replica">Replica</a>
+      by <a target="_blank" rel="noopener" href="//github.com/sabrinaluo">Hiitea</a> ❤ Powered by Hexo
+    </div>
+    </div>
+    
+  </footer>
+</div>
+
+
+
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>
