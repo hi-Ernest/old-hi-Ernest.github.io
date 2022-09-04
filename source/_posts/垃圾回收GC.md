@@ -1,7 +1,10 @@
 ---
 title: 垃圾回收GC
 date: 2021-12-13 01:21:40
-tag:
+categories: 
+- 随笔
+tags:
+- java
 ---
 
 什么是GC
