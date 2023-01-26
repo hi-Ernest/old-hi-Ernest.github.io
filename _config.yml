@@ -51,10 +51,9 @@ highlight:
   hljs: false
 
 prism_plugin:
-  enable: true
-  preprocess: true
+  mode: 'preprocess'
+  theme: 'default'
   line_number: true
-  tab_replace: ''
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
@@ -97,7 +96,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: replica
+theme: typography
 
 plugin:
   - hexo-generator-category-enhance
