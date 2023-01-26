@@ -43,12 +43,12 @@ post_asset_folder: true
 relative_link: false
 future: true
 highlight:
-  enable: false
+  enable: true
   line_number: false
-  auto_detect: false
+  auto_detect: true
   tab_replace: ''
   wrap: false
-  hljs: false
+  hljs: true
 
 prism_plugin:
   mode: 'preprocess'
@@ -96,7 +96,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: typography
+theme: paper
 
 plugin:
   - hexo-generator-category-enhance
